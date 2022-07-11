@@ -1,0 +1,22 @@
+name: Create Release Archive
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Archive Release
+      uses: thedoctor0/zip-release@main
+      with:
+        type: 'zip'
+        filename: 'drawiowhiteboard${GITHUB_REF/refs\/tags\//}.zip'
+        path: drawiowhiteboard
+        exclusions: '*.git* /*node_modules/* .editorconfig'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "drawiowhiteboard${GITHUB_REF/refs\/tags\//}.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
